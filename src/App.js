@@ -1,7 +1,15 @@
-import React from 'react'
+import React from 'react';
+import {Route} from 'react-router-dom';
 // import * as BooksAPI from './BooksAPI'
-import Book from './Book';
-import './App.css'
+import Bookshelf from './Bookshelf';
+import './App.css';
+import Link from 'react-router-dom/Link';
+
+const BOOKSHELF_TYPES = {
+  READING:'currentlyReading',
+  TOREAD:'wantToRead',
+  READ:'read'
+}
 
 const books = [{
   "title": "The Linux Command Line",
@@ -124,102 +132,58 @@ const books = [{
 ];
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
-  }
+  // state = {
+  //   /**
+  //    * TODO: Instead of using this state variable to keep track of which page
+  //    * we're on, use the URL in the browser's address bar. This will ensure that
+  //    * users can use the browser's back and forward buttons to navigate between
+  //    * pages, as well as provide a good URL they can bookmark and share.
+  //    */
+  //   showSearchPage: false
+  // }
 
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
-        ) : (
+        <Route exact path='/' render={()=>(
           <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {books.filter((book) => (book.shelf === 'currentlyReading')).map((book)=>(
-                        <li key={book.id}>
-                          <Book 
-                            coverURL={book.imageLinks.thumbnail}
-                            title={book.title}
-                            authors={book.authors}
-                          />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    {books.filter((book) => (book.shelf === 'wantToRead')).map((book)=>(
-                        <li key={book.id}>
-                          <Book 
-                            coverURL={book.imageLinks.thumbnail}
-                            title={book.title}
-                            authors={book.authors}
-                          />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    {books.filter((book) => (book.shelf === 'read')).map((book)=>(
-                        <li key={book.id}>
-                          <Book 
-                            coverURL={book.imageLinks.thumbnail}
-                            title={book.title}
-                            authors={book.authors}
-                          />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+          <div className="list-books-title">
+            <h1>MyReads</h1>
+          </div>
+          <div className="list-books-content">
+            <div>
+              <Bookshelf type={BOOKSHELF_TYPES.READING} title='Currently Reading' books={books} />
+              <Bookshelf type={BOOKSHELF_TYPES.TOREAD} title='Want to Read'  books={books}/>
+              <Bookshelf type={BOOKSHELF_TYPES.READ} title='Read' books={books} />
             </div>
           </div>
-        )}
+          <div className="open-search">
+            <Link to="/search" >Add a book</Link>
+          </div>
+        </div>
+        )}/>
+        <Route exact path='/search' render={({history})=>(
+          <div className="search-books">
+          <div className="search-books-bar">
+            <a className="close-search" onClick={()=>{history.push('/')}}>Close</a>
+            <div className="search-books-input-wrapper">
+              {/*
+                NOTES: The search from BooksAPI is limited to a particular set of search terms.
+                You can find these search terms here:
+                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
+
+                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
+                you don't find a specific author or title. Every search is limited by search terms.
+              */}
+              <input type="text" placeholder="Search by title or author"/>
+
+            </div>
+          </div>
+          <div className="search-books-results">
+            <ol className="books-grid"></ol>
+          </div>
+        </div>
+        )}/>
       </div>
     )
   }
