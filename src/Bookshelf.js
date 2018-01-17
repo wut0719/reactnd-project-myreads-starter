@@ -18,6 +18,7 @@ class Bookshelf extends Component {
             {books.filter((book) => (book.shelf === type)).map((book) => (
               <li key={book.id}>
                 <Book
+                  shelf={book.shelf}
                   coverURL={book.imageLinks.thumbnail}
                   title={book.title}
                   authors={book.authors}
