@@ -9,13 +9,13 @@ class Bookshelf extends Component {
     books: PropTypes.array
   }
   render() {
-    const {type, title, books} = this.props;
+    const { type, title, books } = this.props;
     return (
       <div className="bookshelf">
         <h2 className="bookshelf-title">{title}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {books.filter((book) => (book.shelf === type)).map((book)=>(
+            {books.filter((book) => (book.shelf === type)).map((book) => (
               <li key={book.id}>
                 <Book
                   coverURL={book.imageLinks.thumbnail}
@@ -23,7 +23,7 @@ class Bookshelf extends Component {
                   authors={book.authors}
                 />
               </li>
-              ))}
+            ))}
           </ol>
         </div>
       </div>
