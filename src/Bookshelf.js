@@ -25,9 +25,9 @@ class Bookshelf extends Component {
                     <Book
                       id={book.id}
                       shelf={book.shelf}
-                      coverURL={book.imageLinks.thumbnail}
+                      coverURL={book.imageLinks ? book.imageLinks.thumbnail : 'https://books.google.com/googlebooks/images/no_cover_thumb.gif'}
                       title={book.title}
-                      authors={book.authors}
+                      authors={book.authors || ['UNKNOWN']}
                       changeShelf={() => { this.props.changeShelf() }}
                     />
                   </li>
