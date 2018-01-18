@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 
 class Search extends Component {
+  static propTypes = {
+    changeShelf: PropTypes.func
+  }
   state = {
     query: '',
     books: []
   }
   handleSubmit = (event) => {
     if (event.key === 'Enter') {
-      BooksAPI.search(this.state.query).then((sbooks) => {
+      BooksAPI.search(this.state.query.trim()).then((sbooks) => {
         this.setState({ books: sbooks });
       })
     }
@@ -39,6 +42,7 @@ class Search extends Component {
                   coverURL={book.imageLinks.thumbnail}
                   title={book.title}
                   authors={book.authors || ['UNKNOWN']}
+                  changeShelf={()=>{this.props.changeShelf()}}
                 />
               </li>
             ))

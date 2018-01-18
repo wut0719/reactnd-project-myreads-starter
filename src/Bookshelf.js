@@ -6,7 +6,8 @@ class Bookshelf extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    books: PropTypes.array
+    books: PropTypes.array.isRequired,
+    changeShelf: PropTypes.func
   }
   render() {
     const { type, title, books } = this.props;
@@ -23,6 +24,7 @@ class Bookshelf extends Component {
                   coverURL={book.imageLinks.thumbnail}
                   title={book.title}
                   authors={book.authors}
+                  changeShelf={()=>{this.props.changeShelf()}}
                 />
               </li>
             ))}

@@ -8,7 +8,8 @@ class Book extends Component {
     id: PropTypes.string.isRequired,
     coverURL: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    authors: PropTypes.array.isRequired
+    authors: PropTypes.array.isRequired,
+    changeShelf: PropTypes.func
   }
   render() {
     const { id, shelf, coverURL, title, authors } = this.props;
@@ -16,7 +17,7 @@ class Book extends Component {
       <div className="book">
         <div className="book-top">
           <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: `url(${coverURL})` }}></div>
-          <ShelfSelect shelf={shelf} bookId={id} />
+          <ShelfSelect shelf={shelf} bookId={id} onUpdate={()=>{this.props.changeShelf()}} />
         </div>
         <div className="book-title">{title}</div>
         <div className="book-authors">{authors.join(', ')}</div>

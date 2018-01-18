@@ -17,6 +17,10 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
+    this.updateBooks();
+  }
+
+  updateBooks() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books: books });
     });
@@ -33,9 +37,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Bookshelf type={BOOKSHELF_TYPES.READING} title='Currently Reading' books={books} />
-                <Bookshelf type={BOOKSHELF_TYPES.TOREAD} title='Want to Read' books={books} />
-                <Bookshelf type={BOOKSHELF_TYPES.READ} title='Read' books={books} />
+                <Bookshelf type={BOOKSHELF_TYPES.READING} title='Currently Reading' books={books} changeShelf={() => { this.updateBooks() }} />
+                <Bookshelf type={BOOKSHELF_TYPES.TOREAD} title='Want to Read' books={books} changeShelf={() => { this.updateBooks() }} />
+                <Bookshelf type={BOOKSHELF_TYPES.READ} title='Read' books={books} changeShelf={() => { this.updateBooks() }} />
               </div>
             </div>
             <div className="open-search">
@@ -43,8 +47,8 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )} />
-        <Route exact path='/search' render={()=>(
-          <Search />
+        <Route exact path='/search' render={() => (
+          <Search changeShelf={()=>{this.updateBooks()}}/>
         )} />
       </div>
     )
