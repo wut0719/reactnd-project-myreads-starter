@@ -19,16 +19,22 @@ class Search extends Component {
     if (event.key === 'Enter') {
       this.setState({ loading: true });
       BooksAPI.search(this.state.query.trim()).then((books) => {
-        let myBooks = this.props.myBooks;
-        let fbooks = books.map((book) => {
-          for (let i = 0; i < myBooks.length; i++) {
-            if (myBooks[i].id === book.id) {
-              return { ...book, shelf: myBooks[i].shelf };
+        if (books instanceof Array) {
+          let myBooks = this.props.myBooks;
+          let fbooks = books.map((book) => {
+            for (let i = 0; i < myBooks.length; i++) {
+              if (myBooks[i].id === book.id) {
+                return { ...book, shelf: myBooks[i].shelf };
+              }
             }
-          }
-          return book;
-        });
-        this.setState({ books: fbooks, loading: false });
+            return book;
+          });
+          this.setState({ books: fbooks });
+        } else {
+          this.setState({ books: [] });
+        }
+      }).finally(() => {
+        this.setState({ loading: false });
       })
     }
   }
@@ -52,12 +58,12 @@ class Search extends Component {
             </div>
           ) : (
               <ol className="books-grid">{
-                books.length > 0 && books.map((book) => (
+                books.map((book) => (
                   <li key={book.id}>
                     <Book
                       id={book.id}
                       shelf={book.shelf || 'none'}
-                      coverURL={book.imageLinks.thumbnail}
+                      coverURL={book.imageLinks ? book.imageLinks.thumbnail : 'https://books.google.com/googlebooks/images/no_cover_thumb.gif'}
                       title={book.title}
                       authors={book.authors || ['UNKNOWN']}
                       changeShelf={() => { this.props.changeShelf() }}
@@ -66,6 +72,7 @@ class Search extends Component {
                 ))
               }</ol>
             )}
+            {!loading && <p style={{textAlign:'center',color:'#999'}}>{books.length} Matched Books</p>}
         </div>
       </div>
     );

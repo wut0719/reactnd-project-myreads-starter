@@ -11,24 +11,29 @@ class Bookshelf extends Component {
   }
   render() {
     const { type, title, books } = this.props;
+    let shelfBooks = books.filter((book) => (book.shelf === type));
     return (
       <div className="bookshelf">
         <h2 className="bookshelf-title">{title}</h2>
         <div className="bookshelf-books">
-          <ol className="books-grid">
-            {books.filter((book) => (book.shelf === type)).map((book) => (
-              <li key={book.id}>
-                <Book
-                  id={book.id}
-                  shelf={book.shelf}
-                  coverURL={book.imageLinks.thumbnail}
-                  title={book.title}
-                  authors={book.authors}
-                  changeShelf={()=>{this.props.changeShelf()}}
-                />
-              </li>
-            ))}
-          </ol>
+          {shelfBooks.length === 0 ? (
+            <div className="page-placeholder">IT IS EMPTY</div>
+          ) : (
+              <ol className="books-grid">
+                {shelfBooks.map((book) => (
+                  <li key={book.id}>
+                    <Book
+                      id={book.id}
+                      shelf={book.shelf}
+                      coverURL={book.imageLinks.thumbnail}
+                      title={book.title}
+                      authors={book.authors}
+                      changeShelf={() => { this.props.changeShelf() }}
+                    />
+                  </li>
+                ))}
+              </ol>
+            )}
         </div>
       </div>
     )

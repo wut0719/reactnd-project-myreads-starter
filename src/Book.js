@@ -12,12 +12,12 @@ class Book extends Component {
     changeShelf: PropTypes.func
   }
   render() {
-    const { id, shelf, coverURL, title, authors } = this.props;
+    const { id, shelf, coverURL, title, authors, changeShelf } = this.props;
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: `url(${coverURL})` }}></div>
-          <ShelfSelect shelf={shelf} bookId={id} onUpdate={()=>{this.props.changeShelf()}} />
+          <div className="book-cover" style={{ width: 128, height: 188, backgroundImage: `url(${coverURL})`,backgroundSize:'cover' }}></div>
+          <ShelfSelect shelf={shelf} bookId={id} onUpdate={()=>{changeShelf()}} />
         </div>
         <div className="book-title">{title}</div>
         <div className="book-authors">{authors.join(', ')}</div>

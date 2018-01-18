@@ -199,3 +199,12 @@ body,
     text-align: center;
     padding: 60px;
 }
+
+
+/* page placeholder */
+
+.page-placeholder {
+    height: 50px;
+    line-height: 50px;
+    color: #999;
+}

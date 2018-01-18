@@ -26,7 +26,9 @@ class BooksApp extends React.Component {
   updateBooks() {
     this.setState({ loading: true });
     BooksAPI.getAll().then((books) => {
-      this.setState({ books: books, loading: false });
+      this.setState({ books: books });
+    }).finally(() => {
+      this.setState({ loading: false });
     });
   }
 
