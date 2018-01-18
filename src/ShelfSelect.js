@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as BooksAPI from './BooksAPI';
 
 class ShelfSelect extends Component {
   static propTypes = {
+    bookId: PropTypes.string.isRequired,
     shelf: PropTypes.string.isRequired
   }
   state = {
@@ -11,6 +13,7 @@ class ShelfSelect extends Component {
   handleChange = (event) => {
     event.preventDefault();
     this.setState({ value: event.target.value });
+    BooksAPI.update({ id: this.props.bookId }, event.target.value).then(data => { console.dir(data) })
   }
   render() {
     const { value } = this.state;

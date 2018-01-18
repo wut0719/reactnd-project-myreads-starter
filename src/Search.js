@@ -34,6 +34,7 @@ class Search extends Component {
             books.length > 0 && books.map((book) => (
               <li key={book.id}>
                 <Book
+                  id={book.id}
                   shelf="none"
                   coverURL={book.imageLinks.thumbnail}
                   title={book.title}
