@@ -6,6 +6,7 @@ import Book from './Book';
 
 class Search extends Component {
   static propTypes = {
+    myBooks: PropTypes.array.isRequired,
     changeShelf: PropTypes.func
   }
   state = {
@@ -14,8 +15,19 @@ class Search extends Component {
   }
   handleSubmit = (event) => {
     if (event.key === 'Enter') {
-      BooksAPI.search(this.state.query.trim()).then((sbooks) => {
-        this.setState({ books: sbooks });
+      BooksAPI.search(this.state.query.trim()).then((books) => {
+        let myBooks = this.props.myBooks;
+        console.dir(myBooks);
+        let fbooks = books.map((book) => {
+          for (let i = 0; i < myBooks.length; i++) {
+            if (myBooks[i].id === book.id) {
+              return { ...book, shelf: myBooks[i].shelf };
+            }
+          }
+          return book;
+        });
+        console.dir(fbooks);
+        this.setState({ books: fbooks });
       })
     }
   }
@@ -38,11 +50,11 @@ class Search extends Component {
               <li key={book.id}>
                 <Book
                   id={book.id}
-                  shelf="none"
+                  shelf={book.shelf || 'none'}
                   coverURL={book.imageLinks.thumbnail}
                   title={book.title}
                   authors={book.authors || ['UNKNOWN']}
-                  changeShelf={()=>{this.props.changeShelf()}}
+                  changeShelf={() => { this.props.changeShelf() }}
                 />
               </li>
             ))
