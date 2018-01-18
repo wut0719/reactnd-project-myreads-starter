@@ -5,6 +5,15 @@ import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { PulseLoader } from 'halogenium';
 
+
+/**
+ * 搜索组件
+ * 
+ * 
+ * 输入参数：
+ * - myBooks，书库列表，array，必选
+ * - changeShelf, 更改书架的回调函数，func，可选
+ */
 class Search extends Component {
   static propTypes = {
     myBooks: PropTypes.array.isRequired,
@@ -15,10 +24,16 @@ class Search extends Component {
     loading: false,
     books: []
   }
+
+  /**
+   * 提交表单的回调函数
+   */
   handleSubmit = (event) => {
     if (event.key === 'Enter') {
+      // 只有在按下回车键时才提交
       this.setState({ loading: true });
       BooksAPI.search(this.state.query.trim()).then((books) => {
+        // 将搜索结果与书库列表进行对比，增加shelf属性值
         if (books instanceof Array) {
           let myBooks = this.props.myBooks;
           let fbooks = books.map((book) => {
@@ -31,6 +46,7 @@ class Search extends Component {
           });
           this.setState({ books: fbooks });
         } else {
+          // 查询结果为空
           this.setState({ books: [] });
         }
       }).finally(() => {
@@ -38,6 +54,10 @@ class Search extends Component {
       })
     }
   }
+  
+  /**
+   * change事件的回调函数，控制input的value
+   */
   handleChange = (event) => {
     this.setState({ query: event.target.value });
   }

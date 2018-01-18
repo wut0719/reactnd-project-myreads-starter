@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Book from './Book';
 
+/**
+ * 书架组件
+ * 
+ * 
+ * 输入参数：
+ * - type，书架类型，string，必选
+ * - title，书架名称，string，必选
+ * - books，书库列表，array，必选
+ * - changeShelf, 更改书架的回调函数，func，可选
+ */
 class Bookshelf extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,

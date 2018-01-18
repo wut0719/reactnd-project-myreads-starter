@@ -7,6 +7,9 @@ import { PulseLoader } from 'halogenium';
 
 import './App.css';
 
+/**
+ * 书架类型
+ */
 const BOOKSHELF_TYPES = {
   READING: 'currentlyReading',
   TOREAD: 'wantToRead',
@@ -16,13 +19,16 @@ const BOOKSHELF_TYPES = {
 class BooksApp extends React.Component {
   state = {
     books: [],
-    loading: true
+    loading: false
   }
 
   componentDidMount() {
     this.updateBooks();
   }
 
+  /**
+   * 异步请求后台数据：所有添加到书库的book（getAll）
+   */
   updateBooks() {
     this.setState({ loading: true });
     BooksAPI.getAll().then((books) => {
