@@ -3,6 +3,8 @@ import { Route, Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import Bookshelf from './Bookshelf';
 import Search from './Search';
+import { PulseLoader } from 'halogenium';
+
 import './App.css';
 
 const BOOKSHELF_TYPES = {
@@ -13,7 +15,8 @@ const BOOKSHELF_TYPES = {
 
 class BooksApp extends React.Component {
   state = {
-    books: []
+    books: [],
+    loading: true
   }
 
   componentDidMount() {
@@ -21,13 +24,14 @@ class BooksApp extends React.Component {
   }
 
   updateBooks() {
+    this.setState({ loading: true });
     BooksAPI.getAll().then((books) => {
-      this.setState({ books: books });
+      this.setState({ books: books, loading: false });
     });
   }
 
   render() {
-    const { books } = this.state;
+    const { books, loading } = this.state;
     return (
       <div className="app">
         <Route exact path='/' render={() => (
@@ -36,11 +40,17 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <div>
-                <Bookshelf type={BOOKSHELF_TYPES.READING} title='Currently Reading' books={books} changeShelf={() => { this.updateBooks() }} />
-                <Bookshelf type={BOOKSHELF_TYPES.TOREAD} title='Want to Read' books={books} changeShelf={() => { this.updateBooks() }} />
-                <Bookshelf type={BOOKSHELF_TYPES.READ} title='Read' books={books} changeShelf={() => { this.updateBooks() }} />
-              </div>
+              {loading ? (
+                <div className="loading">
+                  <PulseLoader color="#2e7c31" size="16px" margin="4px" />
+                </div>
+              ) : (
+                  <div>
+                    <Bookshelf type={BOOKSHELF_TYPES.READING} title='Currently Reading' books={books} changeShelf={() => { this.updateBooks() }} />
+                    <Bookshelf type={BOOKSHELF_TYPES.TOREAD} title='Want to Read' books={books} changeShelf={() => { this.updateBooks() }} />
+                    <Bookshelf type={BOOKSHELF_TYPES.READ} title='Read' books={books} changeShelf={() => { this.updateBooks() }} />
+                  </div>
+                )}
             </div>
             <div className="open-search">
               <Link to="/search" >Add a book</Link>
@@ -48,7 +58,7 @@ class BooksApp extends React.Component {
           </div>
         )} />
         <Route exact path='/search' render={() => (
-          <Search myBooks={books} changeShelf={()=>{this.updateBooks()}}/>
+          <Search myBooks={books} changeShelf={() => { this.updateBooks() }} />
         )} />
       </div>
     )
